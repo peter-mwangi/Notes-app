@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import com.example.testapp.R
 import com.example.testapp.model.User
@@ -18,6 +19,7 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var mEmail: TextInputLayout
     private lateinit var mPassword: TextInputLayout
     private lateinit var confirmPassword: TextInputLayout
+    private lateinit var loginLink: TextView
     private lateinit var signupBtn: Button
     private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +31,10 @@ class SignupActivity : AppCompatActivity() {
         signupBtn.setOnClickListener {
 
             validateInputData()
+        }
+        loginLink.setOnClickListener {
+            val intent = Intent(this@SignupActivity, LoginActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -102,8 +108,8 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun toHomeActivity(userInfo: User) {
-        val intent = Intent(this@SignupActivity, HomeActivity::class.java)
-        intent.putExtra(Constants.USER, userInfo)
+        val intent = Intent(this@SignupActivity, LoginActivity::class.java)
+//        intent.putExtra(Constants.USER, userInfo)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
     }
@@ -115,5 +121,6 @@ class SignupActivity : AppCompatActivity() {
         mPassword = findViewById(R.id.password_field)
         confirmPassword = findViewById(R.id.confirm_password_field)
         signupBtn = findViewById(R.id.submit_btn)
+        loginLink = findViewById(R.id.login_link)
     }
 }

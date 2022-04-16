@@ -90,7 +90,8 @@ class AddNoteActivity : AppCompatActivity() {
         val currentDate = SimpleDateFormat("dd.MM.yyyy").format(System.currentTimeMillis())
         val currentTime = SimpleDateFormat("HH:mm:ss.SSS").format(System.currentTimeMillis())
         currentDateTime = "$currentDate $currentTime"
-        val note = Notes(uId, title, currentDateTime, noteBody, reminder)
+        val noteId = notesReference.document().id
+        val note = Notes(noteId, uId, title, currentDateTime, noteBody, reminder)
         notesReference.add(note).addOnSuccessListener {
             Toast.makeText(this, "New Note Created", Toast.LENGTH_LONG).show()
             toHomeActivity(note)

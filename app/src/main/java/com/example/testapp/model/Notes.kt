@@ -5,6 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Notes(
+    var noteId: String? =null,
     var userId: String? =null,
     var title:String? = null,
     var timestamp: String? = null,

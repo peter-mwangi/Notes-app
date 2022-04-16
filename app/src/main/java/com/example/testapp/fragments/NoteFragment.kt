@@ -30,16 +30,6 @@ class NoteFragment : Fragment(), NotesAdapter.ItemClickListener {
         note = requireActivity().intent.getParcelableExtra(Constants.NOTE)
 
 
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentNoteBinding.inflate(inflater, container, false)
-
-        initViews()
-
         notesAdapter = NotesAdapter(requireContext(), this@NoteFragment)
 
         val db = FirebaseFirestore.getInstance()
@@ -56,6 +46,7 @@ class NoteFragment : Fragment(), NotesAdapter.ItemClickListener {
                         }.filterNotNull()
                         .toMutableList()
                     notesAdapter.addNotes(notesList)
+                    notesAdapter.notifyDataSetChanged()
 
                 }
             }
@@ -67,6 +58,16 @@ class NoteFragment : Fragment(), NotesAdapter.ItemClickListener {
             Toast.makeText(requireActivity(), e.localizedMessage, Toast.LENGTH_LONG).show()
 
         }
+
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentNoteBinding.inflate(inflater, container, false)
+
+        initViews()
 
 
         return _binding.root

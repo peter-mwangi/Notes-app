@@ -184,6 +184,19 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+    <TextView
+        android:id="@+id/login_link"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="@dimen/twenty_dp"
+        android:text="@string/already_have_an_account_login"
+        android:textStyle="bold"
+        android:textSize="@dimen/eighteen_sp"
+        android:textColor="#6774B6"
+        android:textAlignment="center"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

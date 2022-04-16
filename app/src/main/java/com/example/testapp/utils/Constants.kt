@@ -8,5 +8,6 @@ class Constants {
         const val NOTES: String = "notes"
         const val NOTE: String = "note"
         const val UID: String ="userId"
+        const val NID: String ="noteId"
     }
 }
