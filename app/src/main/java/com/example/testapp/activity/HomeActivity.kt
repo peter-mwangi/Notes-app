@@ -3,6 +3,7 @@ package com.example.testapp.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.testapp.R
 import com.example.testapp.fragments.DraftFragment
@@ -45,11 +46,15 @@ class HomeActivity : AppCompatActivity() {
 
 //    override fun onStart() {
 //        super.onStart()
-//        val currentUser = auth.currentUser
-//        if (currentUser == null){
-//            intent = Intent(this, LoginActivity::class.java)
-//            startActivity(intent)
+//        val onlineUser = auth.currentUser
+//        if (onlineUser != null){
+//            val toLoginIntent = Intent(this, LoginActivity::class.java)
+//            toLoginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+//            startActivity(toLoginIntent)
 //            finish()
+//        }
+//        else{
+//            Toast.makeText(this, "Welcome", Toast.LENGTH_LONG).show()
 //        }
 //    }
 

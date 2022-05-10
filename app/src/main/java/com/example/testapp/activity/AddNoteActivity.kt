@@ -4,37 +4,33 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.example.testapp.R
+import com.example.testapp.databinding.ActivityAddNoteBinding
 import com.example.testapp.model.Notes
 import com.example.testapp.model.User
 import com.example.testapp.utils.Constants
-import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.*
 
 class AddNoteActivity : AppCompatActivity() {
-    private lateinit var noteTitle: TextInputLayout
-    private lateinit var noteDesc: TextInputLayout
-    private lateinit var reminderDate: TextView
-    private lateinit var saveNoteBtn: Button
-    private lateinit var cancelNoteBtn: Button
+    private lateinit var binding: ActivityAddNoteBinding
     private lateinit var currentDateTime: String
     private lateinit var user: User
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_note)
+        binding = ActivityAddNoteBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         initViews()
-         user = intent.getParcelableExtra(Constants.USER)!!
+        user = intent.getParcelableExtra(Constants.USER)!!
 
         val calendar = Calendar.getInstance()
         val dateSetListener =
@@ -45,11 +41,11 @@ class AddNoteActivity : AppCompatActivity() {
 
                 val myFormat = "dd.MM.yyyy"
                 val sdf = SimpleDateFormat(myFormat, Locale.US)
-                reminderDate.text = sdf.format(calendar.time)
+                binding.addNoteDate.text = sdf.format(calendar.time)
 
             }
 
-        reminderDate.setOnClickListener {
+        binding.addNoteDate.setOnClickListener {
             DatePickerDialog(
                 this@AddNoteActivity, dateSetListener,
                 calendar.get(Calendar.YEAR),
@@ -58,27 +54,44 @@ class AddNoteActivity : AppCompatActivity() {
             ).show()
         }
 
-        saveNoteBtn.setOnClickListener {
-            validateUserInputs()
+    }
+
+    private fun initViews() {
+        binding.apply {
+            saveNoteBtn.setOnClickListener {
+                validateUserInputs()
+            }
+
+            addNoteCameraIcon.setOnClickListener {
+                addPhotoDialog()
+            }
         }
     }
 
+    private fun addPhotoDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Upload using:")
+            .setItems(R.array.media_options)
+    }
+
     private fun validateUserInputs() {
-        val title = noteTitle.editText?.text.toString().trim()
-        val noteBody = noteDesc.editText?.text.toString().trim()
-        val reminder = reminderDate.text.toString()
+        binding.apply {
+            val title = addNoteTitle.editText?.text.toString().trim()
+            val noteBody = addNoteDetail.editText?.text.toString().trim()
+            val reminder = addNoteDate.text.toString()
 
-        if (title.isNotEmpty()) {
+            if (title.isNotEmpty()) {
 
-            if (noteBody.isNotEmpty()) {
+                if (noteBody.isNotEmpty()) {
 
-                saveNote(title, noteBody, reminder)
+                    saveNote(title, noteBody, reminder)
 
+                } else {
+                    addNoteTitle.error = "Cannot be empty"
+                }
             } else {
-                noteDesc.error = "Cannot be empty"
+                addNoteDetail.error = "Cannot be empty"
             }
-        } else {
-            noteTitle.error = "Cannot be empty"
         }
     }
 
@@ -96,7 +109,7 @@ class AddNoteActivity : AppCompatActivity() {
             Toast.makeText(this, "New Note Created", Toast.LENGTH_LONG).show()
             toHomeActivity(note)
 
-        }.addOnFailureListener { e->
+        }.addOnFailureListener { e ->
             Toast.makeText(this, e.localizedMessage, Toast.LENGTH_LONG).show()
         }
     }
@@ -107,14 +120,6 @@ class AddNoteActivity : AppCompatActivity() {
         intent.putExtra(Constants.USER, user)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
-    }
-
-    private fun initViews() {
-        noteTitle = findViewById(R.id.add_note_title)
-        noteDesc = findViewById(R.id.add_note_detail)
-        reminderDate = findViewById(R.id.add_note_date)
-        saveNoteBtn = findViewById(R.id.save_note_btn)
-        cancelNoteBtn = findViewById(R.id.cancel_note_btn)
     }
 
 }

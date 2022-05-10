@@ -97,20 +97,18 @@ class SignupActivity : AppCompatActivity() {
     private fun saveUserData(firstName: String, lastName: String, email: String) {
         val db = FirebaseFirestore.getInstance()
         val usersRef = db.collection(Constants.USERS)
-        val userId = usersRef.document().id
+        val userId = auth.currentUser!!.uid
         val userInfo = User(userId, firstName, lastName, email)
         usersRef.document(userId).set(userInfo).addOnSuccessListener {
             Toast.makeText(this, "User Data Saved Successfully", Toast.LENGTH_LONG).show()
-            toHomeActivity(userInfo)
+            toLoginActivity()
         }.addOnFailureListener { e ->
             Toast.makeText(this, e.localizedMessage, Toast.LENGTH_LONG).show()
         }
     }
 
-    private fun toHomeActivity(userInfo: User) {
+    private fun toLoginActivity() {
         val intent = Intent(this@SignupActivity, LoginActivity::class.java)
-//        intent.putExtra(Constants.USER, userInfo)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
     }
 

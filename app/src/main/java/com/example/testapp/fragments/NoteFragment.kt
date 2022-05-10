@@ -2,6 +2,7 @@ package com.example.testapp.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ class NoteFragment : Fragment(), NotesAdapter.ItemClickListener {
     private lateinit var binding: FragmentNoteBinding
     private val _binding get() = binding!!
 
+    private val TAG = "NotesRefResult"
     private lateinit var notesAdapter: NotesAdapter
     private var user:User? = null
     private var note:Notes? = null
@@ -31,13 +33,14 @@ class NoteFragment : Fragment(), NotesAdapter.ItemClickListener {
 
 
         notesAdapter = NotesAdapter(requireContext(), this@NoteFragment)
-
         val db = FirebaseFirestore.getInstance()
         val notesReference = db.collection(Constants.NOTES)
         notesReference.whereEqualTo(Constants.UID, user?.userId).get().addOnCompleteListener { task ->
 
             if (task.isSuccessful){
+                //Explore Timber.
                 task.result.let {
+                    Log.d(TAG, "initViews: ${it.documents}")
                     val notesList = it.documents
                         .map { snapShot ->
                             snapShot.toObject(Notes::class.java)
@@ -74,7 +77,6 @@ class NoteFragment : Fragment(), NotesAdapter.ItemClickListener {
     }
 
     private fun initViews() {
-//        notesAdapter.addNotes()
         binding.apply {
             val fullName = "Hello ${user?.firstName} ${user?.lastName}"
             fullnameText.text = fullName
