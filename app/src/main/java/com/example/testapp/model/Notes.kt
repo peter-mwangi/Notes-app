@@ -11,5 +11,5 @@ data class Notes(
     var timestamp: String? = null,
     var body: String? = null,
     var reminder: String? = null,
-    //var titile:String? = null
+    var imagePath:String? = null
 ):Parcelable
